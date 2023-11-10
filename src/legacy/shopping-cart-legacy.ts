@@ -1,8 +1,9 @@
 type CartItem = { name: string; price: number };
+type OrderStatus = 'open' | 'closed';
 
-export class ShoppingCart {
+export class ShoppingCartLegacy {
   private readonly _items: CartItem[] = [];
-  private orderStatus: 'open' | 'closed' = 'open';
+  private _orderStatus: OrderStatus = 'open';
 
   addItem(item: CartItem): void {
     this._items.push(item);
@@ -16,6 +17,10 @@ export class ShoppingCart {
     return this._items;
   }
 
+  get orderStatus(): OrderStatus {
+    return this._orderStatus;
+  }
+
   total(): number {
     return +this._items
       .reduce((total, next) => total + next.price, 0)
@@ -27,7 +32,7 @@ export class ShoppingCart {
       console.log('Your cart is empty!!');
     }
 
-    this.orderStatus = 'closed';
+    this._orderStatus = 'closed';
     this.sendMessage(
       `Your order has been received.. The total is $${this.total()}`,
     );
@@ -53,7 +58,7 @@ export class ShoppingCart {
   }
 }
 
-const shoppingCart = new ShoppingCart();
+const shoppingCart = new ShoppingCartLegacy();
 shoppingCart.addItem({ name: 'T-Shirt', price: 49.9 });
 shoppingCart.addItem({ name: 'Notebook', price: 15.9 });
 shoppingCart.addItem({ name: 'Pencil', price: 1.49 });
@@ -61,4 +66,6 @@ shoppingCart.addItem({ name: 'Pencil', price: 1.49 });
 
 // console.log(shoppingCart.items);
 // console.log(shoppingCart.total());
+console.log(shoppingCart.orderStatus);
 shoppingCart.checkout();
+console.log(shoppingCart.orderStatus);
